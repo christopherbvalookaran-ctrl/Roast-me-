@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Roasting Guru 🔥</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #000;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      transition: background-color 0.3s ease;
+    }
+
+    .container {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 0 30px red;
+      position: relative;
+      transition: box-shadow 0.3s ease;
+    }
+
+    h1 {
+      color: #ff4444;
+      user-select: none;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 15px;
+      user-select: text;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      background-color: #ff4444;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.15s ease;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #cc0000;
+    }
+
+    .roast-box {
+      margin-top: 100px;
+      background: #000;
+      padding: 20px;
+      border-radius: 12px;
+      min-height: 90px;
+      font-size: 20px;
+      color: #ff9999;
+      font-weight: 600;
+      user-select: none;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    /* Shaking animations */
+    @keyframes shake-intense {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      10% { transform: translate(-10px, 10px) rotate(-8deg); }
+      20% { transform: translate(-10px, -10px) rotate(8deg); }
+      30% { transform: translate(10px, 10px) rotate(0deg); }
+      40% { transform: translate(10px, -10px) rotate(8deg); }
+      50% { transform: translate(-10px, 10px) rotate(-8deg); }
+      60% { transform: translate(10px, 10px) rotate(0deg); }
+      70% { transform: translate(-10px, -10px) rotate(8deg); }
+      80% { transform: translate(10px, 10px) rotate(-8deg); }
+      90% { transform: translate(-10px, 10px) rotate(8deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes text-flicker {
+      0%, 100% { opacity: 1; color: #ff6666; text-shadow: 0 0 5px #ff6666; }
+      50% { opacity: 0.6; color: #ff2222; text-shadow: 0 0 20px #ff2222; }
+    }
+
+    .shake-intense {
+      animation: shake-intense 0.7s;
+    }
+
+    .text-flicker {
+      animation: text-flicker 0.7s ease-in-out;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container" id="container">
+    <h1>Roasting Guru 👹 CHAOS MAX</h1>
+    <input type="text" id="nameInput" placeholder="Enter a victim..." autocomplete="off" />
+    <br>
+    <button id="roastBtn" onclick="roast()">Roast</button>
+    <div class="roast-box" id="roastOutput">Type a name and prepare to burn! 🔥</div>
+  </div>
+
+  <script>
+    const roasts = [
+      "{name} is the reason pencils have erasers.",
+      "{name} brings a spoon to a sword fight.",
+      "{name} thought WiFi was short for 'wife'.",
+      "{name} has two brain cells — and they're fighting for 3rd place.",
+      "Even AI can’t fix {name}’s logic.",
+      "{name}'s reflection leaves the mirror out of shame.",
+      "{name} once tried to download RAM.",
+      "When {name} was born, the hospital apologized.",
+    ];
+
+    const trollUserLines = [
+      "You clicked too many times. Touch grass. 🌱",
+      "You didn't even enter a name, genius. Try again.",
+      "What are you doing? Typing air?",
+      "I’m not a magician — gimme a name!",
+      "Bro... the button doesn’t bite. Type something first.",
+      "Stop clicking randomly and use your 2 brain cells.",
+      "Even the input box is embarrassed by you."
+    ];
+
+    const container = document.getElementById('container');
+    const roastBtn = document.getElementById('roastBtn');
+    const roastOutput = document.getElementById('roastOutput');
+    const nameInput = document.getElementById('nameInput');
+
+    let clickCount = 0;
+
+    function roast() {
+      clickCount++;
+      const name = nameInput.value.trim();
+
+      if (!name) {
+        triggerChaos(trollUserLines[Math.floor(Math.random() * trollUserLines.length)]);
+        return;
+      }
+
+      if (clickCount % 5 === 0) {
+        triggerChaos(trollUserLines[Math.floor(Math.random() * trollUserLines.length)]);
+        return;
+      }
+
+      const roastText = roasts[Math.floor(Math.random() * roasts.length)].replace(/{name}/g, name);
+      displayRoast(roastText);
+    }
+
+    function triggerChaos(message) {
+      roastOutput.textContent = message;
+      roastOutput.classList.add('text-flicker');
+      container.classList.add('shake-intense');
+      document.body.style.backgroundColor = '#ff0000';
+
+      speak(message);
+
+      // Remove chaos effects after animation
+      setTimeout(() => {
+        roastOutput.classList.remove('text-flicker');
+        container.classList.remove('shake-intense');
+        document.body.style.backgroundColor = '#000000';
+      }, 700);
+    }
+
+    function displayRoast(text) {
+      roastOutput.textContent = text;
+      speak(text);
+    }
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      speechSynthesis.speak(utterance);
+    }
+
+  </script>
+
+</body>
+</html>
